@@ -1,14 +1,18 @@
-import gymnasium as gym
-from stable_baselines3 import DQN
-from tictactoe_rl.env import TicTacToeEnv
-from core.logger import setup_logging, get_logger
-import os
+"""Module for training RL agents for Tic-Tac-Toe."""
+
 import argparse
+import os
+from typing import Any
+
+from stable_baselines3 import DQN
+
+from core.logger import get_logger, setup_logging
+from tictactoe_rl.env import TicTacToeEnv
 
 logger = get_logger("tictactoe_rl.train")
 
 # Configuration presets for different difficulty levels
-DIFFICULTY_CONFIGS = {
+DIFFICULTY_CONFIGS: dict[str, dict[str, Any]] = {
     "easy": {
         "net_arch": [64, 64],
         "total_timesteps": 50000,
@@ -36,53 +40,67 @@ DIFFICULTY_CONFIGS = {
         "learning_rate": 1e-4,
         "buffer_size": 200000,
         "batch_size": 256,
-    }
+    },
 }
 
-def train(difficulty: str):
+
+def train(difficulty: str) -> None:
+    """Trains a DQN model for the specified difficulty."""
     if difficulty not in DIFFICULTY_CONFIGS:
-        raise ValueError(f"Invalid difficulty: {difficulty}. Choose from {list(DIFFICULTY_CONFIGS.keys())}")
+        raise ValueError(
+            f"Invalid difficulty: {difficulty}. Choose from {list(DIFFICULTY_CONFIGS.keys())}"
+        )
 
     config = DIFFICULTY_CONFIGS[difficulty]
     setup_logging()
-    logger.info(f"Initializing environment for '{difficulty}' difficulty...")
+    logger.info("Initializing environment for '%s' difficulty...", difficulty)
     env = TicTacToeEnv()
-    
-    logger.info(f"Configuring DQN model (Difficulty: {difficulty}) with architecture {config['net_arch']}")
+
+    logger.info(
+        "Configuring DQN model (Difficulty: %s) with architecture %s",
+        difficulty,
+        config["net_arch"],
+    )
     model = DQN(
-        "MlpPolicy", 
-        env, 
-        verbose=1, 
-        learning_rate=config["learning_rate"], 
-        buffer_size=config["buffer_size"], 
+        "MlpPolicy",
+        env,
+        verbose=1,
+        learning_rate=config["learning_rate"],
+        buffer_size=config["buffer_size"],
         batch_size=config["batch_size"],
         exploration_fraction=0.2,
         exploration_final_eps=0.05,
-        policy_kwargs={'net_arch': config['net_arch']}
+        policy_kwargs={"net_arch": config["net_arch"]},
     )
-    
-    logger.info(f"Starting training for {difficulty} ({config['total_timesteps']} timesteps)...")
+
+    logger.info(
+        "Starting training for %s (%s timesteps)...",
+        difficulty,
+        config["total_timesteps"],
+    )
     try:
         model.learn(total_timesteps=config["total_timesteps"])
         logger.info("Training finished successfully.")
-    except Exception as e:
-        logger.error(f"An error occurred during training: {e}", exc_info=True)
+    except Exception:  # pylint: disable=broad-exception-caught
+        logger.exception("An error occurred during training")
         return
-    
+
     os.makedirs("models", exist_ok=True)
     model_path = f"models/tictactoe_dqn_{difficulty}"
     model.save(model_path)
-    logger.info(f"Model saved to {model_path}")
+    logger.info("Model saved to %s", model_path)
+
 
 if __name__ == "__main__":
-    parser = argparse.ArgumentParser(description="Train Tic-Tac-Toe RL agents with different difficulties.")
+    parser = argparse.ArgumentParser(
+        description="Train Tic-Tac-Toe RL agents with different difficulties."
+    )
     parser.add_argument(
-        "--difficulty", 
-        type=str, 
-        choices=list(DIFFICULTY_CONFIGS.keys()), 
+        "--difficulty",
+        type=str,
+        choices=list(DIFFICULTY_CONFIGS.keys()),
         default="medium",
-        help="Difficulty preset to use for training (default: medium)"
+        help="Difficulty preset to use for training (default: medium)",
     )
     args = parser.parse_args()
     train(args.difficulty)
-

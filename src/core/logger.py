@@ -1,12 +1,13 @@
+"""Module for setting up and getting logger instances."""
+
 import json
-import logging.config
 import logging
+import logging.config
 import os
 
+
 def setup_logging(
-    default_path="logging_config.json",
-    default_level=logging.INFO,
-    env_key="LOG_CFG"
+    default_path="logging_config.json", default_level=logging.INFO, env_key="LOG_CFG"
 ):
     """
     Sets up logging configuration from a JSON file or environment variable.
@@ -25,11 +26,12 @@ def setup_logging(
         path = value
 
     if os.path.exists(path):
-        with open(path, "rt") as f:
+        with open(path, "rt", encoding="utf-8") as f:
             config = json.load(f)
         logging.config.dictConfig(config)
     else:
         logging.basicConfig(level=default_level)
+
 
 def get_logger(name: str) -> logging.Logger:
     """Returns a logger instance with the given name."""
