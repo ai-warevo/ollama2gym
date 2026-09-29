@@ -79,7 +79,7 @@ if __name__ == "__main__":
     parser.add_argument(
         "--difficulty", 
         type=str, 
-        choices=["easy", "medium", "hard"], 
+        choices=list(DIFFICULTY_CONFIGS.keys()), 
         default="medium",
         help="Difficulty preset to use for training (default: medium)"
     )
