@@ -18,10 +18,11 @@ def run_command(command: list[str]) -> int:
 def main() -> None:
     """Последовательно запускает весь стек проверок кода."""
     commands = [
-        ["black", "--check", "src"],
-        ["ruff", "check", "src"],
-        ["mypy", "src"],
+        ["black", "--check", "src", "tests"],
+        ["ruff", "check", "src", "tests"],
+        ["mypy", "src", "tests"],
         ["pylint", "src"],
+        ["pylint", "--disable=C0114,C0115,C0116,W0621,W0212,R0801", "tests"],
     ]
 
     has_errors = False
