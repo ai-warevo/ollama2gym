@@ -17,14 +17,14 @@
             "class": "logging.FileHandler",
             "level": "DEBUG",
             "formatter": "simple",
-            "filename": "tictactoe.log",
+            "filename": "logs/tictactoe.log",
             "mode": "a"
         },
         "tictactoe_rl_file": {
             "class": "logging.FileHandler",
             "level": "DEBUG",
             "formatter": "simple",
-            "filename": "tictactoe_rl.log",
+            "filename": "logs/tictactoe_rl.log",
             "mode": "a"
         }
     },

@@ -7,7 +7,8 @@ build/
 dist/
 wheels/
 *.egg-info
+models/
+logs/
 
 # Virtual environments
 .venv
-models/

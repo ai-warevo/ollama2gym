@@ -11,7 +11,11 @@ def setup_logging(
     """
     Sets up logging configuration from a JSON file or environment variable.
     If the file is not found, defaults to basic logging with the specified level.
+    Ensures the 'logs/' directory exists for handlers defined in config.
     """
+    # Ensure logs directory exists as it's the standard location for our log files
+    os.makedirs("logs", exist_ok=True)
+
     # Get path relative to this file's directory if not provided via env var
     base_dir = os.path.dirname(os.path.abspath(__file__))
     path = os.path.join(base_dir, default_path)
