@@ -30,7 +30,7 @@ def setup_logging(
             config = json.load(f)
         logging.config.dictConfig(config)
     else:
-        logging.basicConfig(level=default_level)
+        logging.basicConfig(level=default_level, force=True)
 
 
 def get_logger(name: str) -> logging.Logger:
