@@ -6,7 +6,7 @@ import dearpygui.dearpygui as dpg
 from stable_baselines3 import DQN
 from tictactoe.engine import TicTacToeEngine
 from tictactoe.gui import TicTacToeGUI
-from core.logger import get_logger
+from core.logger import setup_logging, get_logger
 
 logger = get_logger("tictactoe_rl.play")
 
@@ -66,6 +66,7 @@ class AIGameGUI(TicTacToeGUI):
         self._update_display()
 
 def main():
+    setup_logging()
     model_path = "models/tictactoe_dqn"
     if not os.path.exists(model_path + ".zip"):
         logger.error(f"Trained model not found at {model_path}")
