@@ -29,6 +29,13 @@ DIFFICULTY_CONFIGS = {
         "learning_rate": 3e-4,
         "buffer_size": 100000,
         "batch_size": 128,
+    },
+    "expert": {
+        "net_arch": [512, 512],
+        "total_timesteps": 2000000,
+        "learning_rate": 1e-4,
+        "buffer_size": 200000,
+        "batch_size": 256,
     }
 }
 

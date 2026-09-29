@@ -73,7 +73,7 @@ def main():
     parser.add_argument(
         "--difficulty", 
         type=str, 
-        choices=["easy", "medium", "hard"], 
+        choices=["easy", "medium", "hard", "expert"], 
         help="Difficulty level (loads models/tictactoe_dqn_{difficulty}.zip)"
     )
     args = parser.parse_args()
