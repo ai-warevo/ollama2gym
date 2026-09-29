@@ -81,7 +81,7 @@ def main():
     if args.difficulty:
         model_path = f"models/tictactoe_dqn_{args.difficulty}"
     else:
-        model_path = "models/tictactoe_dqn"
+        model_path = "models/tictactoe_dqn_hard"
 
     if not os.path.exists(model_path + ".zip"):
         logger.error(f"Trained model not found at {model_path}. Please train it first using 'python -m tictactoe_rl.train --difficulty <level>'.")
