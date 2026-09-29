@@ -11,23 +11,23 @@ def train():
     logger.info("Initializing environment...")
     env = TicTacToeEnv()
     
-    # Using a simple MLP policy [128, 128] as requested
-    logger.info("Configuring DQN model with MlpPolicy and architecture [128, 128]")
+    # Using a more robust MLP policy [256, 256]
+    logger.info("Configuring DQN model with MlpPolicy and architecture [256, 256]")
     model = DQN(
         "MlpPolicy", 
         env, 
         verbose=1, 
-        learning_rate=1e-3, 
-        buffer_size=50000, 
-        batch_size=64,
+        learning_rate=3e-4, 
+        buffer_size=100000, 
+        batch_size=128,
         exploration_fraction=0.2,
         exploration_final_eps=0.05,
-        policy_kwargs={'net_arch': [128, 128]}
+        policy_kwargs={'net_arch': [256, 256]}
     )
     
-    logger.info("Starting training (this may take a minute)...")
+    logger.info("Starting training (this may take a few minutes)...")
     try:
-        model.learn(total_timesteps=200000)
+        model.learn(total_timesteps=500000)
         logger.info("Training finished successfully.")
     except Exception as e:
         logger.error(f"An error occurred during training: {e}", exc_info=True)

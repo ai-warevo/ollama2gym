@@ -71,4 +71,4 @@ class TicTacToeEnv(gym.Env):
                 logger.info("Game drawn after X move!")
                 return self._get_obs(), 0.0, True, False, {}
 
-        return self._get_obs(), 0.0, False, False, {}
+        return self._get_obs(), -0.1, False, False, {}
