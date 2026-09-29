@@ -6,8 +6,13 @@ readme = "README.md"
 authors = [
     { name = "Aleksandr Loktionov", email = "loktionov129@gmail.com" }
 ]
-requires-python = ">=3.12"
-dependencies = []
+requires-python = ">=3.14"
+dependencies = [
+    "black>=26.5.1",
+    "mypy>=2.3.1",
+    "pylint>=4.0.9",
+    "ruff>=0.16.9",
+]
 
 [project.scripts]
 ollama2gym = "ollama2gym:main"
