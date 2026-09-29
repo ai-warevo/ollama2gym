@@ -1,6 +1,7 @@
 import os
 import time
 import threading
+import argparse
 import numpy as np
 import dearpygui.dearpygui as dpg
 from stable_baselines3 import DQN
@@ -67,9 +68,23 @@ class AIGameGUI(TicTacToeGUI):
 
 def main():
     setup_logging()
-    model_path = "models/tictactoe_dqn"
+    
+    parser = argparse.ArgumentParser(description="Play Tic-Tac-Toe against an AI.")
+    parser.add_argument(
+        "--difficulty", 
+        type=str, 
+        choices=["easy", "medium", "hard"], 
+        help="Difficulty level (loads models/tictactoe_dqn_{difficulty}.zip)"
+    )
+    args = parser.parse_args()
+
+    if args.difficulty:
+        model_path = f"models/tictactoe_dqn_{args.difficulty}"
+    else:
+        model_path = "models/tictactoe_dqn"
+
     if not os.path.exists(model_path + ".zip"):
-        logger.error(f"Trained model not found at {model_path}")
+        logger.error(f"Trained model not found at {model_path}. Please train it first using 'python -m tictactoe_rl.train --difficulty <level>'.")
         return
 
     try:
