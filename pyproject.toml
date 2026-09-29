@@ -1,7 +1,7 @@
 [project]
-name = "ollama2gym"
+name = "tictactoe"
 version = "0.1.0"
-description = "Add your description here"
+description = "Tic-Tac-Toe with RL support"
 readme = "README.md"
 authors = [
     { name = "Aleksandr Loktionov", email = "loktionov129@gmail.com" }
@@ -10,14 +10,18 @@ requires-python = ">=3.14"
 dependencies = [
     "black>=26.5.1",
     "dearpygui>=2.3.1",
+    "gymnasium>=1.3.0",
     "mypy>=2.3.1",
     "pylint>=4.0.9",
     "pytest>=8.0.0",
     "ruff>=0.16.9",
+    "stable-baselines3>=2.9.0",
+    "torch>=2.14.0",
 ]
 
 [project.scripts]
 tictactoe = "tictactoe.main:main"
+check = "check:main"
 
 [build-system]
 requires = ["uv_build>=0.12.19,<0.13.0"]
