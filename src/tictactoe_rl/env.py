@@ -3,6 +3,9 @@ import numpy as np
 from gymnasium import spaces
 from tictactoe.engine import TicTacToeEngine
 import random
+from core.logger import get_logger
+
+logger = get_logger("tictactoe_rl.env")
 
 class TicTacToeEnv(gym.Env):
     def __init__(self):
@@ -14,6 +17,7 @@ class TicTacToeEnv(gym.Env):
         self.action_space = spaces.Discrete(9)
 
     def reset(self, seed=None, options=None):
+        logger.info("Resetting environment")
         super().reset(seed=seed)
         self.engine.reset()
         return self._get_obs(), {}
@@ -25,29 +29,36 @@ class TicTacToeEnv(gym.Env):
         # Agent is playing as PLAYER_O (Player 2).
         # The engine starts with PLAYER_X.
         # We assume the turn has reached O by this call.
+        logger.debug(f"Step: Action taken = {action}")
 
         success = self.engine.make_move(action)
         
         if not success:
+            logger.warning(f"Invalid action attempted: {action}")
             return self._get_obs(), -10.0, True, False, {}
         
         # Check if agent (O) won
         if self.engine.get_winner() == TicTacToeEngine.PLAYER_O:
+            logger.info("Agent (O) won!")
             return self._get_obs(), 10.0, True, False, {}
         
         if self.engine.is_draw:
+            logger.info("Game drawn!")
             return self._get_obs(), 0.0, True, False, {}
 
         # Now it is X's turn (Random Player)
         possible_moves = [i for i, val in enumerate(self.engine.get_board()) if val == TicTacToeEngine.EMPTY]
         if possible_moves:
             random_move = random.choice(possible_moves)
+            logger.debug(f"X (Random Player) chooses move: {random_move}")
             self.engine.make_move(random_move)
             
             # Check if X won after their random move
             if self.engine.get_winner() == TicTacToeEngine.PLAYER_X:
+                logger.info("X (Random Player) won!")
                 return self._get_obs(), -10.0, True, False, {}
             elif self.engine.is_draw:
+                logger.info("Game drawn after X move!")
                 return self._get_obs(), 0.0, True, False, {}
 
         return self._get_obs(), 0.0, False, False, {}

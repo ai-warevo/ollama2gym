@@ -1,13 +1,18 @@
 import gymnasium as gym
 from stable_baselines3 import DQN
 from tictactoe_rl.env import TicTacToeEnv
+from core.logger import setup_logging, get_logger
 import os
 
+logger = get_logger("tictactoe_rl.train")
+
 def train():
-    print("Initializing environment...")
+    setup_logging()
+    logger.info("Initializing environment...")
     env = TicTacToeEnv()
     
     # Using a simple MLP policy [128, 128] as requested
+    logger.info("Configuring DQN model with MlpPolicy and architecture [128, 128]")
     model = DQN(
         "MlpPolicy", 
         env, 
@@ -20,13 +25,18 @@ def train():
         policy_kwargs={'net_arch': [128, 128]}
     )
     
-    print("Starting training (this may take a minute)...")
-    model.learn(total_timesteps=40000)
-    print("Training finished.")
+    logger.info("Starting training (this may take a minute)...")
+    try:
+        model.learn(total_timesteps=40000)
+        logger.info("Training finished successfully.")
+    except Exception as e:
+        logger.error(f"An error occurred during training: {e}", exc_info=True)
+        return
     
     os.makedirs("models", exist_ok=True)
-    model.save("models/tictactoe_dqn")
-    print("Model saved to models/tictactoe_dqn")
+    model_name = "models/tictactoe_dqn"
+    model.save(model_name)
+    logger.info(f"Model saved to {model_name}")
 
 if __name__ == "__main__":
     train()
