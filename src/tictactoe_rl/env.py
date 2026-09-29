@@ -20,6 +20,16 @@ class TicTacToeEnv(gym.Env):
         logger.info("Resetting environment")
         super().reset(seed=seed)
         self.engine.reset()
+
+        # Agent is playing as PLAYER_O (Player 2).
+        # The engine starts with PLAYER_X. We make a random move for X 
+        # so that it's the agent's turn when step() is first called.
+        possible_moves = [i for i, val in enumerate(self.engine.get_board()) if val == TicTacToeEngine.EMPTY]
+        if possible_moves:
+            random_move = random.choice(possible_moves)
+            logger.debug(f"X (Random Player) makes first move: {random_move}")
+            self.engine.make_move(random_move)
+
         return self._get_obs(), {}
 
     def _get_obs(self):

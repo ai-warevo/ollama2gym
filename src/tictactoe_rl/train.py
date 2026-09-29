@@ -27,7 +27,7 @@ def train():
     
     logger.info("Starting training (this may take a minute)...")
     try:
-        model.learn(total_timesteps=40000)
+        model.learn(total_timesteps=200000)
         logger.info("Training finished successfully.")
     except Exception as e:
         logger.error(f"An error occurred during training: {e}", exc_info=True)
