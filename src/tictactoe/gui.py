@@ -1,5 +1,8 @@
 import dearpygui.dearpygui as dpg
 from .engine import TicTacToeEngine
+from core.logger import get_logger
+
+logger = get_logger("tictactoe.gui")
 
 class TicTacToeGUI:
     """
@@ -14,6 +17,7 @@ class TicTacToeGUI:
     COLOR_BTN_NORMAL = (38, 38, 38, 255)
 
     def __init__(self, engine: TicTacToeEngine) -> None:
+        logger.debug("Initializing GUI")
         self.engine = engine
         self._setup_dpg()
         self._create_ui()
@@ -23,11 +27,13 @@ class TicTacToeGUI:
 
     def _setup_dpg(self) -> None:
         """Initializes the Dear PyGui context and viewport."""
+        logger.debug("Setting up DPG")
         dpg.create_context()
         dpg.create_viewport(title='Tic-Tac-Toe Pro', width=400, height=520)
 
     def _create_ui(self) -> None:
         """Builds the UI layout."""
+        logger.debug("Creating UI")
         with dpg.window(label="Game Window", tag="PrimaryWindow"):
             dpg.add_text("TIC TAC TOE", color=list(self.COLOR_TEXT))
             dpg.add_spacer(height=20)
@@ -98,10 +104,14 @@ class TicTacToeGUI:
 
 
     def _on_click(self, sender: int, app_data: int, user_data: int) -> None:
+        logger.debug(f"Button clicked: {user_data}")
         if self.engine.make_move(user_data):
             self._update_display()
+        else:
+            logger.warning(f"Invalid click at position {user_data}")
 
     def _on_restart(self) -> None:
+        logger.info("Restart requested")
         self.engine.reset()
         self._update_display()
 
@@ -147,6 +157,7 @@ class TicTacToeGUI:
 
     def run(self) -> None:
         """Starts the Dear PyGui loop."""
+        logger.info("Starting GUI loop")
         dpg.setup_dearpygui()
         dpg.show_viewport()
         dpg.start_dearpygui()

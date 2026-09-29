@@ -1,4 +1,7 @@
 from typing import List, Optional, Literal
+from core.logger import get_logger
+
+logger = get_logger("tictactoe.engine")
 
 class TicTacToeEngine:
     """
@@ -11,6 +14,7 @@ class TicTacToeEngine:
     PLAYER_O = 2
 
     def __init__(self) -> None:
+        logger.debug("Initializing engine")
         self.board: List[int] = [self.EMPTY] * 9
         self.current_player: Literal[self.PLAYER_X, self.PLAYER_O] = self.PLAYER_X
         self.winner: Optional[int] = None
@@ -18,6 +22,7 @@ class TicTacToeEngine:
 
     def reset(self) -> None:
         """Resets the game state to default."""
+        logger.info("Resetting engine")
         self.board = [self.EMPTY] * 9
         self.current_player = self.PLAYER_X
         self.winner = None
@@ -28,18 +33,24 @@ class TicTacToeEngine:
         Attempts to make a move at the specified position (0-8).
         Returns True if the move was successful, False otherwise.
         """
+        logger.debug(f"Making move at position {position}")
         if not (0 <= position < 9):
+            logger.warning(f"Invalid move position: {position}")
             return False
         
         if self.board[position] != self.EMPTY or self.winner is not None or self.is_draw:
+            logger.debug(f"Move at {position} is invalid (board full, winner exists, or draw)")
             return False
 
         self.board[position] = self.current_player
+        logger.info(f"Player {self.current_player} moved to position {position}")
         
         if self._check_winner(position):
             self.winner = self.current_player
+            logger.info(f"Winner declared: Player {self.winner}")
         elif self._check_draw():
             self.is_draw = True
+            logger.info("Game resulted in a draw")
         else:
             self._switch_turn()
             
